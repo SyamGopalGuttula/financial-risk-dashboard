@@ -3,6 +3,9 @@ import sqlite3
 import mysql.connector
 import pandas as pd
 
+from dotenv import load_dotenv
+load_dotenv()
+
 # Get SQLite Path
 base_dir = os.path.dirname(os.path.dirname(__file__))
 sqlite_path = os.path.join(base_dir, "data", "snowflake_sim.db")
@@ -16,10 +19,10 @@ df = pd.read_sql_query('SELECT * FROM risk_data', conn_sqlite)
 # Connect to AWS MySQL
 
 rds_conn = mysql.connector.connect(
-    host="financial-risk-db.c29owswq4sn8.us-east-1.rds.amazonaws.com",
-    port=3306,
-    user="admin",
-    password="admin123"
+    host=os.getenv("RDS_HOST"),
+    port=int(os.getenv("RDS_PORT")),
+    user=os.getenv("RDS_USER"),
+    password=os.getenv("RDS_PASSWORD")
 )
 rds_cursor = rds_conn.cursor()
 
